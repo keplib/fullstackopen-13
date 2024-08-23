@@ -2,7 +2,15 @@ const router = require('express').Router();
 
 const { User, Note } = require('../models');
 
-const { tokenExtractor, isAdmin } = require('../util/middleware');
+const { tokenExtractor } = require('../util/middleware');
+
+const isAdmin = async (req, res, next) => {
+  const user = await User.findByPk(req.decodedToken.id);
+  if (!user.admin) {
+    return res.status(401).json({ error: 'operation not allowed' });
+  }
+  next();
+};
 
 router.get('/', async (req, res) => {
   const users = await User.findAll({

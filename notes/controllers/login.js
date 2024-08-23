@@ -22,7 +22,7 @@ router.post('/', async (req, res) => {
   }
 
   if (user.disabled) {
-    return response.status(401).json({
+    return res.status(401).json({
       error: 'account disabled, please contact admin',
     });
   }
